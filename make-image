@@ -37,6 +37,8 @@ mkdir -p /alpine
 mount --make-private "$ROOT_DEV" /alpine
 mkdir -p /alpine/boot
 mount --make-private "$BOOT_DEV" /alpine/boot
+mkdir -p /alpine/lib/firmware
+mount --make-private "$BOOT_DEV" /alpine/lib/firmware
 
 IMGID="$(dd if="${OUTPUT_IMG}" skip=440 bs=1 count=4 2>/dev/null | xxd -e | cut -f 2 -d' ')"
 
@@ -58,8 +60,9 @@ svn export --force https://github.com/raspberrypi/firmware/trunk/boot /alpine/bo
 svn export --force https://github.com/raspberrypi/firmware/trunk/modules /alpine/lib/modules
 
 # RPI 4 Wifi does not work with firmwaresfrom RPi-Distro repo, so we take them from Raspbian Buster from now
-# svn export --force https://github.com/RPi-Distro/firmware-nonfree/trunk/brcm /alpine/lib/firmware/brcm/
-# svn export --force https://github.com/RPi-Distro/bluez-firmware/trunk/broadcom /alpine/lib/firmware/brcm/
+#svn export --force https://github.com/RPi-Distro/firmware-nonfree/trunk/brcm /alpine/lib/firmware/brcm/
+#svn export --force https://github.com/RPi-Distro/bluez-firmware/trunk/broadcom /alpine/lib/firmware/brcm/
+svn export --force https://github.com/RPi-Distro/firmware-nonfree /alpine/lib/firmware/
 curl https://archive.raspberrypi.org/debian/pool/main/f/firmware-nonfree/firmware-brcm80211_20190114-1+rpt2_all.deb | dpkg -x - /alpine
 curl https://archive.raspberrypi.org/debian/pool/main/b/bluez-firmware/bluez-firmware_1.2-4+rpt2_all.deb | dpkg -x - /alpine
 

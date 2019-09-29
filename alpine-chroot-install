@@ -29,9 +29,9 @@
 #                          the same as the host's architecture. If it's different
 #                          from the host's architecture, then it will be emulated
 #                          using qemu-user. Options: x86_64, x86, aarch64, armhf,
-#                          armv7, ppc64le, s390x.
+#                          ppc64le, s390x.
 #
-#   -b ALPINE_BRANCH       Alpine branch to install (default is v3.9).
+#   -b ALPINE_BRANCH       Alpine branch to install (default is v3.8).
 #
 #   -d CHROOT_DIR          Absolute path to the directory where Alpine chroot
 #                          should be installed (default is /alpine).
@@ -78,8 +78,8 @@ set -eu
 
 #=======================  C o n s t a n t s  =======================#
 
-: ${APK_TOOLS_URI:="https://github.com/alpinelinux/apk-tools/releases/download/v2.10.3/apk-tools-2.10.3-x86_64-linux.tar.gz"}
-: ${APK_TOOLS_SHA256:="4d0b2cda606720624589e6171c374ec6d138867e03576d9f518dddde85c33839"}
+: ${APK_TOOLS_URI:="https://github.com/alpinelinux/apk-tools/releases/download/v2.10.3/apk-tools-2.10.3-armhf-linux.tar.gz"}
+: ${APK_TOOLS_SHA256:="e112fb782b27a08d7aee1fb4bf287bb450bc00e9b445ddbdbb20cf4d3a8dcf7e"}
 
 # Alpine APK keys for packages verification.
 ALPINE_KEYS='
@@ -96,7 +96,7 @@ QEMU_MIN_VER='2.6'
 
 # Name of Ubuntu release to install qemu-user-static from if package for
 # the host system is older than $QEMU_MIN_VER.
-QEMU_UBUNTU_REL='bionic'
+QEMU_UBUNTU_REL='artful'
 
 # Version of alpine-chroot-install script.
 VERSION='0.10.0'
@@ -270,10 +270,10 @@ while getopts 'a:b:d:i:k:m:p:r:t:hv' OPTION; do
 	esac
 done
 
-: ${ALPINE_BRANCH:="v3.9"}
-: ${ALPINE_MIRROR:="https://nl.alpinelinux.org/alpine"}
+: ${ALPINE_BRANCH:="v3.10"}
+: ${ALPINE_MIRROR:="http://dl-cdn.alpinelinux.org/alpine"}
 : ${ALPINE_PACKAGES:="build-base ca-certificates ssl_client"}
-: ${ARCH:=}
+: ${ARCH:="armhf"}
 : ${BIND_DIR:=}
 : ${CHROOT_DIR:="/alpine"}
 : ${CHROOT_KEEP_VARS:="ARCH CI QEMU_EMULATOR TRAVIS_.*"}
@@ -337,8 +337,8 @@ mkdir -p "$CHROOT_DIR"/etc/apk
 cd "$CHROOT_DIR"
 
 printf '%s\n' \
-	"$ALPINE_MIRROR/$ALPINE_BRANCH/main" \
-	"$ALPINE_MIRROR/$ALPINE_BRANCH/community" \
+	"$ALPINE_MIRROR/v$ALPINE_BRANCH/main" \
+	"$ALPINE_MIRROR/v$ALPINE_BRANCH/community" \
 	$EXTRA_REPOS \
 	> etc/apk/repositories
 
