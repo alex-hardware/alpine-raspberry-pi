@@ -37,8 +37,8 @@ mkdir -p /alpine
 mount --make-private "$ROOT_DEV" /alpine
 mkdir -p /alpine/boot
 mount --make-private "$BOOT_DEV" /alpine/boot
-mkdir -p /alpine/lib
-mount --make-private "$BOOT_DEV" /alpine/lib
+#mkdir -p /alpine/lib
+#mount --make-private "$BOOT_DEV" /alpine/lib
 
 IMGID="$(dd if="${OUTPUT_IMG}" skip=440 bs=1 count=4 2>/dev/null | xxd -e | cut -f 2 -d' ')"
 
